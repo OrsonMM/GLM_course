@@ -1,7 +1,8 @@
 library(Matrix)
 library(lme4)
+library(OddsPlotty)
 
-pros <- read.csv("pros.tsv", sep = "\t")
+pros <- read.csv("/home/ins-bio/programas/orson_Rscripts/GLM_tareas/pros.tsv", sep = "\t")
 
 pros$capsula <- factor(pros$capsula, levels = c(0,1), labels= c("No penetro","Si Penetro"))
 pros$dpros <- factor(pros$dpros, levels = c(1,2,3,4), labels= c("No nodulo","nodulo unilobar izquierdo", "nodulo unilobar derecho", "nodulo bilobar"))
@@ -58,9 +59,30 @@ summary(modelo_2)
 
 exp(cbind(coef(modelo_2),confint(modelo_2)))
 
-prediccion <- predict.glm(modelo_2,type = "response")
+
+OR <- odds_plot(modelo_2, 
+                title = "Odds Ratios",
+                subtitle = "Factores Asociados a la penetracion capsular",
+                point_col = "#5f00db", 
+                error_bar_colour = "#5f00db",
+                point_size = 1, 
+                error_bar_width = 0.2,
+                h_line_color = "#5f00db")
+## Waiting for profiling to be done...
+OR$odds_plot
+
+# BONDAD DE AJUSTE 
+
+
+p_val = pchisq(residual_deviande, gl_residual_deviance, lower.tail=FALSE)
+
+# Prediccion del modelo binomial
+
+prediccion <- predict.glm(modelo_3,type = "response")
 clasificado <- 1*(prediccion>=0.5)
 
 tabla <- table(capsula,clasificado)
 
 round(100*sum(diag(tabla))/sum(tabla),2)
+
+plot(modelo_2)
