@@ -4,7 +4,7 @@ library(Matrix)
 library(lme4)
 library(OddsPlotty)
 
-pros <- read.csv("/home/ins-bio/programas/orson_Rscripts/GLM_tareas/pros.tsv", sep = "\t")
+pros <- read.csv("pros.tsv", sep = "\t")
 
 pros$capsula <- factor(pros$capsula, levels = c(0,1), labels= c("No penetro","Si Penetro"))
 pros$dpros <- factor(pros$dpros, levels = c(1,2,3,4), labels= c("No nodulo","nodulo unilobar izquierdo", "nodulo unilobar derecho", "nodulo bilobar"))
